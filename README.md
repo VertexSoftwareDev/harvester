@@ -1,5 +1,7 @@
 # Harvester
 
+**English** | [Türkçe](README.tr.md)
+
 [![CI](https://github.com/VertexSoftwareDev/harvester/actions/workflows/ci.yml/badge.svg)](https://github.com/VertexSoftwareDev/harvester/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12%20%7C%203.13-blue)
 ![Typed](https://img.shields.io/badge/typing-mypy%20strict-informational)
@@ -61,6 +63,34 @@ pip install pyharvester            # once published
 git clone https://github.com/VertexSoftwareDev/harvester && cd harvester
 uv sync
 ```
+
+## Quick test
+
+Check that everything works in about a minute. You need [uv](https://docs.astral.sh/uv/)
+and Git; uv installs a suitable Python automatically.
+
+```bash
+git clone https://github.com/VertexSoftwareDev/harvester
+cd harvester
+uv sync                                                  # install dependencies
+uv run harvester --version                               # CLI is installed
+uv run pytest -q                                         # full test suite, no network needed
+uv run harvester validate examples/books.yaml            # check a job file, no requests made
+uv run harvester run examples/books.yaml --max-pages 1 -e csv   # live run: 20 books to output/books.csv
+```
+
+Without uv, using plain pip (Python 3.12+):
+
+```bash
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -e .
+harvester run examples/quotes.yaml --max-pages 1 -e json   # 10 quotes to output/quotes.json
+```
+
+> If `uv` fails with a certificate error (common behind antivirus or corporate
+> proxies), add `--system-certs`, e.g. `uv sync --system-certs`
+> (`--native-tls` on older uv versions).
 
 ## Usage
 
