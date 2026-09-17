@@ -1,0 +1,33 @@
+# books.toscrape.com is a sandbox site built for scraping practice.
+# Run:  harvester run examples/books.yaml
+name: books
+start_urls:
+  - https://books.toscrape.com/catalogue/page-1.html
+
+# One element per book on the listing page.
+item: article.product_pod
+
+fields:
+  title:
+    selector: h3 a
+    attr: title
+    required: true
+  price: p.price_color | price
+  availability: p.instock.availability | strip
+  rating: p.star-rating @class | regex:star-rating (\w+) | lower
+  url: h3 a @href | absolute_url
+  image: div.image_container img @src | absolute_url
+
+pagination:
+  next: li.next a
+  max_pages: 5
+
+http:
+  concurrency: 4
+  rate_limit: 2 # requests per second - be polite
+  retries: 3
+
+exports:
+  - format: excel
+    path: "{name}-{date}.xlsx"
+  - format: csv

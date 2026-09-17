@@ -1,0 +1,24 @@
+# quotes.toscrape.com is a sandbox site built for scraping practice.
+# Run:  harvester run examples/quotes.yaml -e jsonl -e excel
+name: quotes
+start_urls:
+  - https://quotes.toscrape.com/
+
+item: div.quote
+
+fields:
+  text: span.text | strip
+  author:
+    selector: small.author
+    required: true
+  author_url: span a @href | absolute_url
+  tags:
+    selector: a.tag
+    many: true
+
+pagination:
+  next: li.next a
+  max_pages: 10
+
+exports:
+  - format: jsonl
